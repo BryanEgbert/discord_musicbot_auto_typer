@@ -6,7 +6,7 @@ import os
 
 try:
     """This function open the file in read mode if it exist. If the file not exist, create the file"""
-    with open('list.txt', 'r') as file:
+    with open('list.txt', 'r', encoding="utf-8") as file:
         # Read the file content and split it into list
         content = file.read()
         splitted_content = content.split('\n')
