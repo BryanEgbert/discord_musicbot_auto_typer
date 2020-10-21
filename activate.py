@@ -36,6 +36,7 @@ try:
                 continue
         else:
             pyautogui.write("-lq")
+            pyautogui.press('enter')
             sys.exit()
 
 except FileNotFoundError:
