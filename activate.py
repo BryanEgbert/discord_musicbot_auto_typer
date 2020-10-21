@@ -10,7 +10,6 @@ try:
         # Read the file content and split it into list
         content = file.read()
         splitted_content = content.split('\n')
-        print(splitted_content)
         
         # Open discord app
         subprocess.Popen(os.environ[r"DISCORD_PATH"])
