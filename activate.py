@@ -31,7 +31,7 @@ try:
         # If it done looping all the list, stop the program
         for i in splitted_content:
             if i != '':
-                pyautogui.write(f"-play {i}")
+                pyautogui.write(f"-play {i}", interval=0.25)
                 pyautogui.press('enter')
             else:
                 continue
