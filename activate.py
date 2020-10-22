@@ -9,8 +9,9 @@ import os
 @click.option('--prefix',type=str ,required=True, help='type your bot command prefix')
 @click.option('--vc', type=int, required=True, help='Choose which voice channel to connect')
 def main(prefix, vc):
+    global runtime
+    """This function open the file in read mode if it exist. If the file not exist, create the file"""
     try:
-        """This function open the file in read mode if it exist. If the file not exist, create the file"""
         with open('list.txt', 'r', encoding="cp437", errors="ignore") as file:
             # Read the file content and split it into list
             content = file.read()
@@ -35,10 +36,11 @@ def main(prefix, vc):
             # If it done looping all the list, stop the program
             for i in splitted_content:
                 if i != '':
-                    pyautogui.write(f"{prefix}play {i}", interval=0.01)
+                    pyautogui.write(f"{prefix}play {i}")
                     pyautogui.press('enter')
                 else:
                     continue
+                time.sleep(1)
             else:
                 time.sleep(1)
                 pyautogui.write(f"{prefix}loop queue")
@@ -47,8 +49,9 @@ def main(prefix, vc):
                 sys.exit()
 
     except FileNotFoundError:
+        click.echo("File not found. Create file. Creating 'list.txt'...")
         with open('list.txt', 'w') as file:
-            pass
+            click.echo('done!')
 
 if __name__ == '__main__':
     main()
