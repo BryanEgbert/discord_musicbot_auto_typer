@@ -15,7 +15,7 @@ try:
         subprocess.Popen(os.environ[r"DISCORD_PATH"])
 
         # Locate the server logo and click it
-        logo_location = pyautogui.locateCenterOnScreen(r".\images\server_logo.png")
+        logo_location = pyautogui.locateCenterOnScreen(r".\images\server_logo1.png")
         pyautogui.click(logo_location)
 
         # Locate voice channel and click it
@@ -30,12 +30,13 @@ try:
         # If it done looping all the list, stop the program
         for i in splitted_content:
             if i != '':
-                pyautogui.write(f"-play {i}", interval=0.25)
+                pyautogui.write(f"-play {i}", interval=0.01)
                 pyautogui.press('enter')
             else:
                 continue
         else:
-            pyautogui.write("-lq")
+            time.sleep(2)
+            pyautogui.write("-loop queue")
             pyautogui.press('enter')
             sys.exit()
 
