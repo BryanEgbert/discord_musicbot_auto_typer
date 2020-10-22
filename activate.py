@@ -36,16 +36,15 @@ def main(prefix, vc):
             # If it done looping all the list, stop the program
             for i in splitted_content:
                 if i != '':
-                    pyautogui.write(f"{prefix}play {i}")
+                    pyautogui.write(f"{prefix}play {i}", interval=0.02)
                     pyautogui.press('enter')
+                    time.sleep(0.02)
                 else:
                     continue
-                time.sleep(1)
             else:
-                time.sleep(1)
                 pyautogui.write(f"{prefix}loop queue")
                 pyautogui.press('enter')
-                click.echo('done!')
+                click.echo(f'done!')
                 sys.exit()
 
     except FileNotFoundError:
