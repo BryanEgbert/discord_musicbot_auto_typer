@@ -72,12 +72,23 @@ def main(prefix, vc):
 @click.argument("image")
 def add_vc(image):
     """Add voice channel image"""
-    pass
-
+    if n == None and image.endswith((".jpg", ".png", ".jpeg")):
+        shutil.copy(src=image, dst=".\\images\\voice_channel")
+    elif n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg")):
+        shutil.copyfile(src=image, dst=f".\\images\\voice_channel\\{n}")
+    else:
+        click.echo("FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type")
 @cli.command()
 @click.argument("image")
-def add_logo(image):
-    pass
+@click.option("-n", help="Rename file")
+def add_logo(image, n):
+    """Add server logo image"""
+    if n == None and image.endswith((".jpg", ".png", ".jpeg")):
+        shutil.copy(src=image, dst=".\\images\\server_img")
+    elif n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg")):
+        shutil.copyfile(src=image, dst=f".\\images\\server_img\\{n}")
+    else:
+        click.echo("FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type")
 
 @cli.command()
 @click.argument("image")
@@ -87,7 +98,7 @@ def add_channel(image, n):
     if n == None and image.endswith((".jpg", ".png", ".jpeg")):
         shutil.copy(src=image, dst=".\\images\\chat_channel")
     elif n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg")):
-        shutil.copyfile(src=image, dst=f".\images\chat_channel\\{n}")
+        shutil.copyfile(src=image, dst=f".\\images\\chat_channel\\{n}")
     else:
         click.echo("FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type")
 
