@@ -111,10 +111,7 @@ env.bak/
 venv.bak/
 
 # Image subdirectory
-images/chat_channel/
-images/server_img/
-images/voice_channel/
-images/chatbox.png
+images/
 
 # Spyder project settings
 .spyderproject
