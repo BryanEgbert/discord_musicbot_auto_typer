@@ -7,14 +7,23 @@ import time
 import sys
 import os
 
+# Image directory
+vc_image_dir = ".\\images\\voice_channel"
+server_image_dir = ".\\images\\server_img"
+chat_image_dir = ".\\images\\chat_channel"
+
+
 @click.group()
 def cli():
     pass
 
+
 @cli.command()
 @click.option('--prefix', type=str, required=True, help='type your bot command prefix')
-@click.option('-vc', type=int, required=True, help='Choose which voice channel to connect')
-def main(prefix, vc):
+@click.option('-vc', type=int, default=1, help='Choose which voice channel to connect. [default=1]')
+@click.option('-chat', type=int, default=1, help='Choose which chat to click. [default=1]')
+@click.option('-server', type=int, default=1, help='Choose which server logo to click. [default=1]')
+def main(prefix, vc, chat, server):
     """The main function"""
     try:
         with open('list.txt', 'r', encoding="cp437", errors="ignore") as file:
@@ -23,25 +32,34 @@ def main(prefix, vc):
             splitted_content = content.split('\n')
 
             # Open discord app
-            subprocess.Popen(os.environ[r"DISCORD_PATH"])
+            subprocess.Popen(os.environ["DISCORD_PATH"])
+            time.sleep(2)
+
+            server_img = os.listdir(server_image_dir)
+            vc_img = os.listdir(vc_image_dir)
+            chat_img = os.listdir(chat_image_dir)
 
             # Locate the server logo and click it
             logo_location = pyautogui.locateCenterOnScreen(
-                ".\\images\\server_img\\server_logo1.png", confidence=0.8)
+                f"{server_image_dir}\\{server_img[server-1]}", confidence=0.6)
             pyautogui.click(logo_location)
-            print('click logo')
+            time.sleep(1)
 
             # Locate voice channel and click it
             voice_channel_location = pyautogui.locateCenterOnScreen(
-                f".\\images\\voice_channel\\voice_channel{vc}.png", confidence=0.8)
-            pyautogui.click(voice_channel_location)
-            print('click vc')
+                f"{vc_image_dir}\\{vc_img[vc-1]}", confidence=0.8)
+            pyautogui.click(voice_channel_location, clicks=1)
+            time.sleep(1)
+
+            # Locate chat channel and click it
+            chat_channel_location = pyautogui.locateCenterOnScreen(
+                f"{chat_image_dir}\\{chat_img[chat-1]}", confidence=0.7)
+            pyautogui.click(chat_channel_location)
 
             # Locate the chatbox and click it
             chatbox_location = pyautogui.locateCenterOnScreen(
-                ".\\images\\chatbox.png")
+                ".\\images\\chatbox.png", confidence=0.3)
             pyautogui.click(chatbox_location)
-            print('click checkbox')
 
             # Looping over the list and write the content.
             # If it done looping all the list, stop the program
@@ -65,30 +83,36 @@ def main(prefix, vc):
         click.echo("File not found. Create file. Creating 'list.txt'...")
         with open('list.txt', 'w') as file:
             click.echo('done!')
-    except FailSafeException:
+    except pyautogui.FailSafeException:
         click.echo('Execution has been stopped')
-    
+
+
 @cli.command()
 @click.argument("image")
 def add_vc(image):
     """Add voice channel image"""
     if n == None and image.endswith((".jpg", ".png", ".jpeg")):
-        shutil.copy(src=image, dst=".\\images\\voice_channel")
+        shutil.copy(src=image, dst=vc_image_dir)
     elif n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg")):
-        shutil.copyfile(src=image, dst=f".\\images\\voice_channel\\{n}")
+        shutil.copyfile(src=image, dst=f"{vc_image_dir}\\{n}")
     else:
-        click.echo("FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type")
+        click.echo(
+            "FILE TYPE ERROR: Please put the file type e.g.filename.png or invalid image file type")
+
+
 @cli.command()
 @click.argument("image")
 @click.option("-n", help="Rename file")
 def add_logo(image, n):
     """Add server logo image"""
     if n == None and image.endswith((".jpg", ".png", ".jpeg")):
-        shutil.copy(src=image, dst=".\\images\\server_img")
+        shutil.copy(src=image, dst=server_image_dir)
     elif n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg")):
-        shutil.copyfile(src=image, dst=f".\\images\\server_img\\{n}")
+        shutil.copyfile(src=image, dst=f"{server_image_dir}\\{n}")
     else:
-        click.echo("FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type")
+        click.echo(
+            "FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type")
+
 
 @cli.command()
 @click.argument("image")
@@ -96,23 +120,24 @@ def add_logo(image, n):
 def add_channel(image, n):
     """Add chat channel image"""
     if n == None and image.endswith((".jpg", ".png", ".jpeg")):
-        shutil.copy(src=image, dst=".\\images\\chat_channel")
+        shutil.copy(src=image, dst=chat_image_dir)
     elif n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg")):
-        shutil.copyfile(src=image, dst=f".\\images\\chat_channel\\{n}")
+        shutil.copyfile(src=image, dst=f"{chat_image_dir}\\{n}")
     else:
-        click.echo("FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type")
+        click.echo(
+            "FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type")
+
 
 @cli.command()
 def view():
-    vc_image_dir = ".\\images\\voice_channel"
+    """View list images"""
     click.echo("\nVoice Channel")
     if len(os.listdir(vc_image_dir)) != 0:
         for i in os.listdir(vc_image_dir):
-            click.echo("\t-"+ i)
+            click.echo("\t-" + i)
     else:
         click.echo("\tnone")
 
-    server_image_dir = ".\\images\\server_img"
     click.echo("\nServer")
     if len(os.listdir(server_image_dir)) != 0:
         for i in os.listdir(server_image_dir):
@@ -120,7 +145,6 @@ def view():
     else:
         click.echo("\tnone")
 
-    chat_image_dir = ".\\images\\chat_channel"
     click.echo("\nChat Channel")
     if len(os.listdir(chat_image_dir)) != 0:
         for i in os.listdir(chat_image_dir):
