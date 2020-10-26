@@ -19,10 +19,10 @@ def cli():
 
 
 @cli.command()
-@click.option('--prefix', type=str, required=True, help='type your bot command prefix')
-@click.option('-vc', type=int, default=1, help='Choose which voice channel to connect. [default=1]')
-@click.option('-chat', type=int, default=1, help='Choose which chat to click. [default=1]')
-@click.option('-server', type=int, default=1, help='Choose which server logo to click. [default=1]')
+@click.option('-p', '--prefix', type=str, required=True, help='type your bot command prefix')
+@click.option('-vc', type=int, default=1, show_default=True, help='Choose which voice channel to connect.')
+@click.option('-c', '--chat', type=int, default=1, show_default=True, help='Choose which chat to click.')
+@click.option('-s', '--server', type=int, default=1, show_default=True, help='Choose which server logo to click.')
 def main(prefix, vc, chat, server):
     """The main function"""
     try:
