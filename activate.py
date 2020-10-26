@@ -26,12 +26,12 @@ def main(prefix, vc):
             # Locate the server logo and click it
             logo_location = pyautogui.locateCenterOnScreen(
                 ".\\images\\server_img\\server_logo1.png")
-            pyautogui.click(logo_location, confidence=0.6)
+            pyautogui.click(logo_location, confidence=0.7)
 
             # Locate voice channel and click it
             voice_channel_location = pyautogui.locateCenterOnScreen(
                 f".\\images\\voice_channel\\voice_channel{vc}.png")
-            pyautogui.click(voice_channel_location, confidence=0.6)
+            pyautogui.click(voice_channel_location, confidence=0.7)
 
             # Locate the chatbox and click it
             chatbox_location = pyautogui.locateCenterOnScreen(
@@ -65,7 +65,7 @@ def main(prefix, vc):
 @click.argument("image")
 def add_vc(image):
     """Add voice channel image"""
-    pass
+    passds
 
 @cli.command()
 @click.argument("image")
@@ -81,13 +81,27 @@ def add_channel(image):
 def view():
     vc_image_dir = ".\\images\\voice_channel"
     click.echo("\nVoice Channel")
-    for i in os.listdir(vc_image_dir):
-        click.echo("-"+ i)
+    if len(os.listdir(vc_image_dir)) != 0:
+        for i in os.listdir(vc_image_dir):
+            click.echo("\t-"+ i)
+    else:
+        click.echo("\tnone")
 
     server_image_dir = ".\\images\\server_img"
     click.echo("\nServer")
-    for i in os.listdir(server_image_dir):
-        click.echo("-" + i)
+    if len(os.listdir(server_image_dir)) != 0:
+        for i in os.listdir(server_image_dir):
+            click.echo("\t-" + i)
+    else:
+        click.echo("\tnone")
+
+    chat_image_dir = ".\\images\\chat_channel"
+    click.echo("\nChat Channel")
+    if len(os.listdir(chat_image_dir)) != 0:
+        for i in os.listdir(chat_image_dir):
+            click.echo("\t-" + i)
+    else:
+        click.echo("\tnone")
 
 
 if __name__ == '__main__':
