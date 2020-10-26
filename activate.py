@@ -1,5 +1,7 @@
 import pyautogui
 import subprocess
+import cv2
+import shutil
 import click
 import time
 import sys
@@ -25,18 +27,21 @@ def main(prefix, vc):
 
             # Locate the server logo and click it
             logo_location = pyautogui.locateCenterOnScreen(
-                ".\\images\\server_img\\server_logo1.png")
-            pyautogui.click(logo_location, confidence=0.7)
+                ".\\images\\server_img\\server_logo1.png", confidence=0.8)
+            pyautogui.click(logo_location)
+            print('click logo')
 
             # Locate voice channel and click it
             voice_channel_location = pyautogui.locateCenterOnScreen(
-                f".\\images\\voice_channel\\voice_channel{vc}.png")
-            pyautogui.click(voice_channel_location, confidence=0.7)
+                f".\\images\\voice_channel\\voice_channel{vc}.png", confidence=0.8)
+            pyautogui.click(voice_channel_location)
+            print('click vc')
 
             # Locate the chatbox and click it
             chatbox_location = pyautogui.locateCenterOnScreen(
                 ".\\images\\chatbox.png")
             pyautogui.click(chatbox_location)
+            print('click checkbox')
 
             # Looping over the list and write the content.
             # If it done looping all the list, stop the program
@@ -60,12 +65,14 @@ def main(prefix, vc):
         click.echo("File not found. Create file. Creating 'list.txt'...")
         with open('list.txt', 'w') as file:
             click.echo('done!')
+    except FailSafeException:
+        click.echo('Execution has been stopped')
     
 @cli.command()
 @click.argument("image")
 def add_vc(image):
     """Add voice channel image"""
-    passds
+    pass
 
 @cli.command()
 @click.argument("image")
@@ -74,8 +81,15 @@ def add_logo(image):
 
 @cli.command()
 @click.argument("image")
-def add_channel(image):
-    pass
+@click.option("-n", help="Rename file")
+def add_channel(image, n):
+    """Add chat channel image"""
+    if n == None and image.endswith((".jpg", ".png", ".jpeg")):
+        shutil.copy(src=image, dst=".\\images\\chat_channel")
+    elif n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg")):
+        shutil.copyfile(src=image, dst=f".\images\chat_channel\\{n}")
+    else:
+        click.echo("FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type")
 
 @cli.command()
 def view():
@@ -100,8 +114,10 @@ def view():
     if len(os.listdir(chat_image_dir)) != 0:
         for i in os.listdir(chat_image_dir):
             click.echo("\t-" + i)
+        else:
+            click.echo("\n")
     else:
-        click.echo("\tnone")
+        click.echo("\tnone\n")
 
 
 if __name__ == '__main__':
