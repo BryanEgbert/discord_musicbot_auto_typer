@@ -5,6 +5,7 @@ import click
 import time
 import sys
 import cv2
+import re
 import os
 
 # Image directory
@@ -24,11 +25,12 @@ def cli():
 
 
 @cli.command()
-@click.option('-p', '--prefix', type=str, required=True, help='type your bot command prefix')
+@click.option('-pre', '--prefix', type=str, required=True, help='type your bot command prefix')
 @click.option('-vc', type=int, default=1, show_default=True, help='Choose which voice channel to connect.')
 @click.option('-c', '--chat', type=int, default=1, show_default=True, help='Choose which chat to click.')
 @click.option('-s', '--server', type=int, default=1, show_default=True, help='Choose which server logo to click.')
-def main(prefix, vc, chat, server):
+@click.option('-play', '--playlist', type=int, required=True, help='Choose what playlist to play')
+def main(prefix, vc, chat, server, playlist):
     """The main function"""
     try:
         """Validate if the file in image directory exist of not"""
@@ -50,9 +52,7 @@ def main(prefix, vc, chat, server):
             ".\\images\\chatbox.png")
 
     except FileNotFoundError:
-        click.echo("File not found. Create file. Creating 'list.txt'...")
-        with open('list.txt', 'w') as file:
-            click.echo('done!')
+        click.secho("ERROR: Playlist is empty. Use register -p[PATH] command to add playlist", fg='bright_red')
 
     except IndexError:
         click.secho('ERROR: Image file not available. Use the view command to see the file available or --help command to see available commands', fg='bright_red')
@@ -63,6 +63,8 @@ def main(prefix, vc, chat, server):
                 discord_path = file.read()
                 subprocess.Popen(discord_path)
             time.sleep(2.5)
+
+            # Locate server logo location and click it
             logo_location = pyautogui.locateCenterOnScreen(
                 f"{server_image_dir}\\{server_img[server-1]}", confidence=0.6)
             pyautogui.click(logo_location)
@@ -86,15 +88,15 @@ def main(prefix, vc, chat, server):
 
             # Open playlist.txt in read mode
             with open('playlist.txt', 'r') as file:
-                song_file = file.read()
+                file_content = file.read()
+                playlists = file_content.split('\n')
                 # Open the textfile path stored inside playlist.txt
-                with open(song_file, 'r', encoding="cp437", errors="ignore") as songs:
+                with open(playlists[playlist-1], 'r', encoding="cp437", errors="ignore") as songs:
                     # Read and split the content into list based on line break
                     song_content = songs.read()
                     splitted_content = song_content.split('\n')
 
                     # Looping over the list and write the content.
-                    # If it done looping all the list, stop the program
                     for i in splitted_content:
                         # Check for empty string e.g.line break
                         if i != '':
@@ -104,14 +106,15 @@ def main(prefix, vc, chat, server):
                         # If exist, skip it and continue the loop
                         else:
                             continue
+                    # If the loop has completed
                     else:
                         # Enter loop queue command.
                         # If the command prefix is "-"(Groovy musicbot)
                         if (prefix == "-"):
-                            pyautogui.write(f"{prefix}loop queue")
+                            pyautogui.write(f"{prefix}loop queue", interval=0.03)
                         # If the command prefix is "!"(Rythm musicbot)
                         else:
-                            pyautogui.write(f"{prefix}loopqueue")
+                            pyautogui.write(f"{prefix}loopqueue", interval=0.03)      
                         pyautogui.press('enter')
                         click.secho('done!', fg='green')
                         sys.exit()
@@ -162,7 +165,6 @@ def add_channel(image, name):
     """Add chat channel image"""
     CopyImage(image, name)
 
-
 @cli.command()
 @click.option("-d", "--discord", type=click.Path(exists=True), help="Register discord path")
 @click.option("-p", "--playlist", required=True, type=click.Path(exists=True), help="Register songs in textfile")
@@ -175,14 +177,15 @@ def register(discord, playlist):
                 file.write(discord)
 
             with open("playlist.txt", "a") as file:
-                file.write(playlist)
+                file.write(playlist + "\n")
+
         elif (discord == None and playlist.endswith(".txt")):
             with open("playlist.txt", "a") as file:
-                file.write(playlist)
+                file.write(playlist + "\n")
     # If playlist.txt don't exist or deleted(just in case). Create a new one
     except FileNotFoundError:
         with open("playlist.txt", "w") as file:
-            file.write(playlist)
+            file.write(playlist + "\n")
 
 
 @cli.command()
@@ -194,33 +197,53 @@ def view():
     # list the file inside voice_channel directory
     click.secho("\nVoice Channel", fg='cyan', bold=True, underline=True)
     if len(os.listdir(vc_image_dir)) != 0:
-        for file in os.listdir(vc_image_dir):
+        for index, file in enumerate(os.listdir(vc_image_dir)):
             filename, file_extension = os.path.splitext(file)
-            click.secho("  -" + filename, fg='bright_green')
+            click.secho(f"  {index+1}. " + filename, fg='bright_green')
     else:
-        click.secho("  -none", fg='red')
+        click.secho("  none", fg='red')
 
     # list the file inside server_img directory
     click.secho("\nServer", fg='cyan', bold=True, underline=True)
     if len(os.listdir(server_image_dir)) != 0:
-        for file in os.listdir(server_image_dir):
+        for index, file in enumerate(os.listdir(server_image_dir)):
             filename, file_extension = os.path.splitext(file)
-            click.secho("  -" + filename, fg='bright_green')
+            click.secho(f"  {index+1}. " + filename, fg='bright_green')
     else:
-        click.secho("  -none", fg='red')
+        click.secho("  none", fg='red')
 
     # list the file inside chat_channel directory
     click.secho("\nChat Channel", fg='cyan', bold=True, underline=True)
     if (len(os.listdir(chat_image_dir)) != 0):
-        for file in os.listdir(chat_image_dir):
+        for index, file in enumerate(os.listdir(chat_image_dir)):
             filename, file_extension = os.path.splitext(file)
-            click.secho("  -" + filename, fg='bright_green')
-        # Add newline after the loop is finished
-        else:
-            click.echo("")
+            click.secho(f"  {index+1}. " + filename, fg='bright_green')
     else:
-        click.secho("  -none\n", fg='red')
+        click.secho("  none\n", fg='red')
 
+    # List the playlist inside playlist.txt
+    click.secho("\nPlaylist", fg="cyan", bold=True, underline=True)
+    with open("playlist.txt", "r") as file:
+        file_content = file.read()
+        splitted_content = file_content.split('\n')
+
+        # Check if the file is empty
+        if splitted_content != ['']:
+            for index, playlist in enumerate(splitted_content):
+                # If the list is not empty
+                if len(playlist) > 1:
+                    # Normalize the path from "\\" to "\" and 
+                    # turn it into a list based on "\"
+                    playlist_path=os.path.normpath(playlist).split(os.sep)
+
+                    click.secho(f"  {index+1}. " + playlist_path[-1][:-4], fg='bright_green')
+                else:
+                    continue
+            # Add spacing
+            else:
+                click.echo("")
+        else:
+            click.secho("  none\n", fg='red')
 
 if __name__ == '__main__':
     cli()
