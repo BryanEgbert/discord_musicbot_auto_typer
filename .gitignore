@@ -110,8 +110,10 @@ ENV/
 env.bak/
 venv.bak/
 
-# Image subdirectory
+# Private directory
 images/
+*discord_path.txt
+*playlist.txt
 
 # Spyder project settings
 .spyderproject
