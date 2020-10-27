@@ -155,27 +155,32 @@ def view():
     """View list images"""
 
     # List all the file in the images sub-directory.
+    #==================================================
     # list the file inside voice_channel directory
     click.secho("\nVoice Channel", fg='cyan', bold=True, underline=True)
     if len(os.listdir(vc_image_dir)) != 0:
-        for i in os.listdir(vc_image_dir):
-            click.secho("  -" + i, fg='green')
+        for file in os.listdir(vc_image_dir):
+            filename, file_extension = os.path.splitext(file) 
+            click.secho("  -" + filename, fg='bright_green')
     else:
         click.secho("  -none", fg='red')
 
     # list the file inside server_img directory
     click.secho("\nServer", fg='cyan', bold=True, underline=True)
     if len(os.listdir(server_image_dir)) != 0:
-        for i in os.listdir(server_image_dir):
-            click.secho("  -" + i, fg='green')
+        for file in os.listdir(server_image_dir):
+            filename, file_extension = os.path.splitext(file) 
+            click.secho("  -" + filename, fg='bright_green')
     else:
         click.secho("  -none", fg='red')
 
     # list the file inside chat_channel directory
     click.secho("\nChat Channel", fg='cyan', bold=True, underline=True)
     if (len(os.listdir(chat_image_dir)) != 0):
-        for i in os.listdir(chat_image_dir):
-            click.secho("  -" + i, fg='green')
+        for file in os.listdir(chat_image_dir):
+            filename, file_extension = os.path.splitext(file) 
+            click.secho("  -" + filename, fg='bright_green')
+        # Add newline after the loop is finished
         else:
             click.echo("")
     else:
