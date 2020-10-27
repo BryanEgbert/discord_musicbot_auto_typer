@@ -111,51 +111,51 @@ def main(prefix, vc, chat, server):
         except pyautogui.FailSafeException:
             click.secho('Execution has been stopped', fg='yellow')
 
-
+class CopyImage:
+    """This class validate the file type and copy the file into images subdirectory"""
+    def __init__(self, image, name):
+        self.image = image
+        self.name = name
+        # Check if the file ends with .png, .jpg, .jpeg
+        if (self.name == None and self.image.endswith((".jpg", ".png", ".jpeg"))):
+            shutil.copy(src=image, dst=vc_image_dir)
+        elif (self.name != None and self.image.endswith((".jpg", ".png", ".jpeg")) and self.name.endswith((".jpg", ".png", ".jpeg"))):
+            shutil.copyfile(src=image, dst=f"{vc_image_dir}\\{n}")
+        # Give error if the file type is invalid
+        else:
+            click.secho(
+                "FILE TYPE ERROR: Please put the file type e.g.filename.png or invalid image file type", fg='bright_red')
+        
 @cli.command()
 @click.argument("image")
-def add_vc(image):
+@click.option("-n", "--name", help="Rename file")
+def add_vc(image,name):
     """Add voice channel image"""
-    if n == None and image.endswith((".jpg", ".png", ".jpeg")):
-        shutil.copy(src=image, dst=vc_image_dir)
-    elif n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg")):
-        shutil.copyfile(src=image, dst=f"{vc_image_dir}\\{n}")
-    else:
-        click.echo(
-            "FILE TYPE ERROR: Please put the file type e.g.filename.png or invalid image file type", fg='bright_red')
+    CopyImage(image, name)
 
 
 @cli.command()
 @click.argument("image")
-@click.option("-n", help="Rename file")
-def add_logo(image, n):
+@click.option("-n", "--name", help="Rename file")
+def add_logo(image, name):
     """Add server logo image"""
-    if (n == None and image.endswith((".jpg", ".png", ".jpeg"))):
-        shutil.copy(src=image, dst=server_image_dir)
-    elif (n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg"))):
-        shutil.copyfile(src=image, dst=f"{server_image_dir}\\{n}")
-    else:
-        click.secho(
-            "FILE TYPE ERROR: Please put the file type e.g.filename.png or invalid image file type", fg='bright_red')
+    CopyImage(image, name)
 
 
 @cli.command()
 @click.argument("image")
-@click.option("-n", help="Rename file")
-def add_channel(image, n):
+@click.option("-n", "--name", help="Rename file")
+def add_channel(image, name):
     """Add chat channel image"""
-    if (n == None and image.endswith((".jpg", ".png", ".jpeg"))):
-        shutil.copy(src=image, dst=chat_image_dir)
-    elif (n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg"))):
-        shutil.copyfile(src=image, dst=f"{chat_image_dir}\\{n}")
-    else:
-        click.echo(
-            "FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type", fg='bright_red')
+    CopyImage(image, name)
 
 
 @cli.command()
 def view():
     """View list images"""
+
+    # List all the file in the images sub-directory.
+    # list the file inside voice_channel directory
     click.secho("\nVoice Channel", fg='cyan', bold=True, underline=True)
     if len(os.listdir(vc_image_dir)) != 0:
         for i in os.listdir(vc_image_dir):
@@ -163,6 +163,7 @@ def view():
     else:
         click.secho("  -none", fg='red')
 
+    # list the file inside server_img directory
     click.secho("\nServer", fg='cyan', bold=True, underline=True)
     if len(os.listdir(server_image_dir)) != 0:
         for i in os.listdir(server_image_dir):
@@ -170,6 +171,7 @@ def view():
     else:
         click.secho("  -none", fg='red')
 
+    # list the file inside chat_channel directory
     click.secho("\nChat Channel", fg='cyan', bold=True, underline=True)
     if (len(os.listdir(chat_image_dir)) != 0):
         for i in os.listdir(chat_image_dir):
