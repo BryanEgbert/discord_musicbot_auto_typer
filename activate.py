@@ -1,11 +1,4 @@
-import pyautogui
-import subprocess
-import cv2
-import shutil
-import click
-import time
-import sys
-import os
+import pyautogui, subprocess, shutil, click, time, sys, cv2, os
 
 # Image directory
 vc_image_dir = ".\\images\\voice_channel"
@@ -76,7 +69,7 @@ def main(prefix, vc, chat, server):
                 else:
                     pyautogui.write(f"{prefix}loopqueue")
                 pyautogui.press('enter')
-                click.echo(f'done!')
+                click.secho('done!', fg='green')
                 sys.exit()
 
     except FileNotFoundError:
@@ -97,7 +90,7 @@ def add_vc(image):
         shutil.copyfile(src=image, dst=f"{vc_image_dir}\\{n}")
     else:
         click.echo(
-            "FILE TYPE ERROR: Please put the file type e.g.filename.png or invalid image file type")
+            "FILE TYPE ERROR: Please put the file type e.g.filename.png or invalid image file type", fg='bright_red')
 
 
 @cli.command()
@@ -110,8 +103,8 @@ def add_logo(image, n):
     elif (n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg"))):
         shutil.copyfile(src=image, dst=f"{server_image_dir}\\{n}")
     else:
-        click.echo(
-            "FILE TYPE ERROR: Please put the file type e.g.filename.png or invalid image file type", err=True)
+        click.secho(
+            "FILE TYPE ERROR: Please put the file type e.g.filename.png or invalid image file type", fg='bright_red')
 
 
 @cli.command()
@@ -125,34 +118,34 @@ def add_channel(image, n):
         shutil.copyfile(src=image, dst=f"{chat_image_dir}\\{n}")
     else:
         click.echo(
-            "FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type")
+            "FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type", fg='bright_red')
 
 
 @cli.command()
 def view():
     """View list images"""
-    click.echo("\nVoice Channel")
+    click.secho("\nVoice Channel", fg='cyan', bold=True, underline=True)
     if len(os.listdir(vc_image_dir)) != 0:
         for i in os.listdir(vc_image_dir):
-            click.echo("\t-" + i)
+            click.secho("  -" + i, fg='green')
     else:
-        click.echo("\tnone")
+        click.secho("  -none", fg='red')
 
-    click.echo("\nServer")
+    click.secho("\nServer", fg='cyan', bold=True, underline=True)
     if len(os.listdir(server_image_dir)) != 0:
         for i in os.listdir(server_image_dir):
-            click.echo("\t-" + i)
+            click.secho("  -" + i, fg='green')
     else:
-        click.echo("\tnone")
+        click.secho("  -none", fg='red')
 
-    click.echo("\nChat Channel")
+    click.secho("\nChat Channel", fg='cyan', bold=True, underline=True)
     if (len(os.listdir(chat_image_dir)) != 0):
         for i in os.listdir(chat_image_dir):
-            click.echo("\t-" + i)
+            click.secho("  -" + i, fg='green')
         else:
-            click.echo("\n")
+            click.echo("")
     else:
-        click.echo("\tnone\n")
+        click.secho("  -none\n", fg='red')
 
 
 if __name__ == '__main__':
