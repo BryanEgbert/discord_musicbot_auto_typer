@@ -105,13 +105,13 @@ def add_vc(image):
 @click.option("-n", help="Rename file")
 def add_logo(image, n):
     """Add server logo image"""
-    if n == None and image.endswith((".jpg", ".png", ".jpeg")):
+    if (n == None and image.endswith((".jpg", ".png", ".jpeg"))):
         shutil.copy(src=image, dst=server_image_dir)
-    elif n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg")):
+    elif (n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg"))):
         shutil.copyfile(src=image, dst=f"{server_image_dir}\\{n}")
     else:
         click.echo(
-            "FILE TYPE ERROR: Please put the file type e.g. filename.png or invalid image file type")
+            "FILE TYPE ERROR: Please put the file type e.g.filename.png or invalid image file type", err=True)
 
 
 @cli.command()
@@ -119,9 +119,9 @@ def add_logo(image, n):
 @click.option("-n", help="Rename file")
 def add_channel(image, n):
     """Add chat channel image"""
-    if n == None and image.endswith((".jpg", ".png", ".jpeg")):
+    if (n == None and image.endswith((".jpg", ".png", ".jpeg"))):
         shutil.copy(src=image, dst=chat_image_dir)
-    elif n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg")):
+    elif (n != None and image.endswith((".jpg", ".png", ".jpeg")) and n.endswith((".jpg", ".png", ".jpeg"))):
         shutil.copyfile(src=image, dst=f"{chat_image_dir}\\{n}")
     else:
         click.echo(
@@ -146,7 +146,7 @@ def view():
         click.echo("\tnone")
 
     click.echo("\nChat Channel")
-    if len(os.listdir(chat_image_dir)) != 0:
+    if (len(os.listdir(chat_image_dir)) != 0):
         for i in os.listdir(chat_image_dir):
             click.echo("\t-" + i)
         else:
