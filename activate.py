@@ -81,17 +81,18 @@ def main(prefix, vc, chat, server):
 
             # Locate the chatbox and click it
             chatbox_location = pyautogui.locateCenterOnScreen(
-                ".\\images\\chatbox.png", confidence=0.3)
+                ".\\images\\chatbox.png", confidence=0.4)
             pyautogui.click(chatbox_location)
 
             # Open playlist.txt in read mode
-            with open('playlist.txt', 'r', encoding="cp437", errors="ignore") as file:
-                # Read the file content
+            with open('playlist.txt', 'r') as file:
                 song_file = file.read()
                 # Open the textfile path stored inside playlist.txt
-                with open(song_file, 'r') as songs:
-                    # Split the content into list based on line break
-                    splitted_content = songs.split('\n')
+                with open(song_file, 'r', encoding="cp437", errors="ignore") as songs:
+                    # Read and split the content into list based on line break
+                    song_content = songs.read()
+                    splitted_content = song_content.split('\n')
+
                     # Looping over the list and write the content.
                     # If it done looping all the list, stop the program
                     for i in splitted_content:
