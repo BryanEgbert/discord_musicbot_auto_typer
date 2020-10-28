@@ -131,14 +131,15 @@ def main(prefix, vc, chat, server, playlist):
 class CopyImage:
     """This class validate the file type and copy the file into images subdirectory"""
 
-    def __init__(self, image, name):
+    def __init__(self, image, name, dir):
         self.image = image
         self.name = name
+        self.dir = dir
         # Check if the file ends with .png, .jpg, .jpeg
         if (self.name == None and self.image.endswith((".jpg", ".png", ".jpeg"))):
-            shutil.copy(src=image, dst=vc_image_dir)
+            shutil.copy(src=image, dst=self.dir)
         elif (self.name != None and self.image.endswith((".jpg", ".png", ".jpeg")) and self.name.endswith((".jpg", ".png", ".jpeg"))):
-            shutil.copyfile(src=image, dst=f"{vc_image_dir}\\{name}")
+            shutil.copyfile(src=image, dst=f"{self.dir}\\{self.name}")
         # Give error if the file type is invalid
         else:
             click.secho(
@@ -150,7 +151,7 @@ class CopyImage:
 @click.option("-n", "--name", help="Rename file")
 def add_vc(image, name):
     """Add voice channel image"""
-    CopyImage(image, name)
+    CopyImage(image, name, vc_image_dir)
 
 
 @cli.command()
@@ -158,7 +159,7 @@ def add_vc(image, name):
 @click.option("-n", "--name", help="Rename file")
 def add_logo(image, name):
     """Add server logo image"""
-    CopyImage(image, name)
+    CopyImage(image, name, server_image_dir)
 
 
 @cli.command()
@@ -166,7 +167,7 @@ def add_logo(image, name):
 @click.option("-n", "--name", help="Rename file")
 def add_channel(image, name):
     """Add chat channel image"""
-    CopyImage(image, name)
+    CopyImage(image, name, chat_image_dir)
 
 
 @cli.command()
