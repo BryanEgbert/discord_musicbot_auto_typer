@@ -52,7 +52,8 @@ def main(prefix, vc, chat, server, playlist):
             ".\\images\\chatbox.png")
 
     except FileNotFoundError:
-        click.secho("ERROR: Playlist is empty. Use register -p[PATH] command to add playlist", fg='bright_red')
+        click.secho(
+            "ERROR: Playlist is empty. Use register -p[PATH] command to add playlist", fg='bright_red')
 
     except IndexError:
         click.secho('ERROR: Image file not available. Use the view command to see the file available or --help command to see available commands', fg='bright_red')
@@ -111,10 +112,12 @@ def main(prefix, vc, chat, server, playlist):
                         # Enter loop queue command.
                         # If the command prefix is "-"(Groovy musicbot)
                         if (prefix == "-"):
-                            pyautogui.write(f"{prefix}loop queue", interval=0.03)
+                            pyautogui.write(
+                                f"{prefix}loop queue", interval=0.03)
                         # If the command prefix is "!"(Rythm musicbot)
                         else:
-                            pyautogui.write(f"{prefix}loopqueue", interval=0.03)      
+                            pyautogui.write(
+                                f"{prefix}loopqueue", interval=0.03)
                         pyautogui.press('enter')
                         click.secho('done!', fg='green')
                         sys.exit()
@@ -135,7 +138,7 @@ class CopyImage:
         if (self.name == None and self.image.endswith((".jpg", ".png", ".jpeg"))):
             shutil.copy(src=image, dst=vc_image_dir)
         elif (self.name != None and self.image.endswith((".jpg", ".png", ".jpeg")) and self.name.endswith((".jpg", ".png", ".jpeg"))):
-            shutil.copyfile(src=image, dst=f"{vc_image_dir}\\{n}")
+            shutil.copyfile(src=image, dst=f"{vc_image_dir}\\{name}")
         # Give error if the file type is invalid
         else:
             click.secho(
@@ -165,6 +168,25 @@ def add_channel(image, name):
     """Add chat channel image"""
     CopyImage(image, name)
 
+
+@cli.command()
+@click.option("-vc", "--voice-channel", "dir", flag_value=vc_image_dir)
+@click.option("-c", "--chat-channel", "dir", flag_value=chat_image_dir)
+@click.option("-s", "--server-logo", "dir", flag_value=server_image_dir)
+@click.argument('file-index', type=int)
+def remove_image(file_index, dir):
+    """Remove image"""
+    if dir != None:
+        image = os.listdir(dir)
+        os.remove(f"{dir}\\{image[file_index-1]}")
+        click.echo(
+            f"image {click.style(image[file_index-1], fg='yellow')} removed")
+    else:
+        click.secho("Error: Missing one of these options ", fg="red", nl=False)
+        click.secho(
+            "['-vc' / '--voice-channel', '-c' / '--chat-channel', '-s' / '--server-image'].", fg='yellow', bold=True)
+
+
 @cli.command()
 @click.option("-d", "--discord", type=click.Path(exists=True), help="Register discord path")
 @click.option("-p", "--playlist", required=True, type=click.Path(exists=True), help="Register songs in textfile")
@@ -182,6 +204,8 @@ def register(discord, playlist):
         elif (discord == None and playlist.endswith(".txt")):
             with open("playlist.txt", "a") as file:
                 file.write(playlist + "\n")
+        else:
+            click.secho("ERROR: Invalid file type", fg="red")
     # If playlist.txt don't exist or deleted(just in case). Create a new one
     except FileNotFoundError:
         with open("playlist.txt", "w") as file:
@@ -232,11 +256,12 @@ def view():
             for index, playlist in enumerate(splitted_content):
                 # If the list is not empty
                 if len(playlist) > 1:
-                    # Normalize the path from "\\" to "\" and 
+                    # Normalize the path from "\\" to "\" and
                     # turn it into a list based on "\"
-                    playlist_path=os.path.normpath(playlist).split(os.sep)
+                    playlist_path = os.path.normpath(playlist).split(os.sep)
 
-                    click.secho(f"  {index+1}. " + playlist_path[-1][:-4], fg='bright_green')
+                    click.secho(f"  {index+1}. " +
+                                playlist_path[-1][:-4], fg='bright_green')
                 else:
                     continue
             # Add spacing
@@ -244,6 +269,7 @@ def view():
                 click.echo("")
         else:
             click.secho("  none\n", fg='red')
+
 
 if __name__ == '__main__':
     cli()
