@@ -147,7 +147,7 @@ class CopyImage:
 
 
 @cli.command()
-@click.argument("image")
+@click.argument("image", type=click.Path(exists=True))
 @click.option("-n", "--name", help="Rename file")
 def add_vc(image, name):
     """Add voice channel image"""
@@ -155,7 +155,7 @@ def add_vc(image, name):
 
 
 @cli.command()
-@click.argument("image")
+@click.argument("image", type=click.Path(exists=True))
 @click.option("-n", "--name", help="Rename file")
 def add_logo(image, name):
     """Add server logo image"""
@@ -163,7 +163,7 @@ def add_logo(image, name):
 
 
 @cli.command()
-@click.argument("image")
+@click.argument("image", type=click.Path(exists=True))
 @click.option("-n", "--name", help="Rename file")
 def add_channel(image, name):
     """Add chat channel image"""
