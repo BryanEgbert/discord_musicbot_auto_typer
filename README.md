@@ -17,14 +17,18 @@ This is the main function that click the server logo, voice channel, chat channe
 
 - add-vc PATH
 A command where you add image of your server's voice channel
-  -n/--name STRING
+  - -n/--name STRING
   A command where you rename the copied image file.
 
 - add-logo PATH
 A command where you add your server's logo.
+  - -n/--name STRING
+  A command where you rename the copied image file.
 
 - add-channel PATH
 A command where you add your server's chat channel.
+  - -n/--name STRING
+  A command where you rename the copied image file.
 
 - remove-image INTEGER
 A command where you remove a specific image file
