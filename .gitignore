@@ -111,10 +111,6 @@ env.bak/
 venv.bak/
 
 # Private directory
-images/chat_channel/*.png
-images/server_img/*.png
-images/voice_channel/*.png
-images/chatbox.png
 *discord_path.txt
 *playlist.txt
 
