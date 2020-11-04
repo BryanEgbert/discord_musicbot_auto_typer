@@ -109,15 +109,9 @@ def main(prefix, vc, chat, server, playlist):
                             continue
                     # If the loop has completed
                     else:
-                        # Enter loop queue command.
-                        # If the command prefix is "-"(Groovy musicbot)
-                        if (prefix == "-"):
-                            pyautogui.write(
-                                f"{prefix}loop queue", interval=0.03)
-                        # If the command prefix is "!"(Rythm musicbot)
-                        else:
-                            pyautogui.write(
-                                f"{prefix}loopqueue", interval=0.03)
+                        # Write loop queue command
+                        pyautogui.write(
+                            f"{prefix}loop queue", interval=0.03)
                         pyautogui.press('enter')
                         click.secho('done!', fg='green')
                         sys.exit()
