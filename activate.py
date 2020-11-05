@@ -238,32 +238,35 @@ def view():
             filename, file_extension = os.path.splitext(file)
             click.secho(f"  {index+1}. " + filename, fg='bright_green')
     else:
-        click.secho("  none\n", fg='red')
+        click.secho("  none", fg='red')
 
     # List the playlist inside playlist.txt
     click.secho("\nPlaylist", fg="cyan", bold=True, underline=True)
-    with open("playlist.txt", "r") as file:
-        file_content = file.read()
-        splitted_content = file_content.split('\n')
+    try:
+        with open("playlist.txt", "r") as file:
+            file_content = file.read()
+            splitted_content = file_content.split('\n')
 
-        # Check if the file is empty
-        if splitted_content != ['']:
-            for index, playlist in enumerate(splitted_content):
-                # If the list is not empty
-                if len(playlist) > 1:
-                    # Normalize the path from "\\" to "\" and
-                    # turn it into a list based on "\"
-                    playlist_path = os.path.normpath(playlist).split(os.sep)
+            # Check if the file is empty
+            if splitted_content != ['']:
+                for index, playlist in enumerate(splitted_content):
+                    # If the list is not empty
+                    if len(playlist) > 1:
+                        # Normalize the path from "\\" to "\" and
+                        # turn it into a list based on "\"
+                        playlist_path = os.path.normpath(playlist).split(os.sep)
 
-                    click.secho(f"  {index+1}. " +
-                                playlist_path[-1][:-4], fg='bright_green')
+                        click.secho(f"  {index+1}. " +
+                                    playlist_path[-1][:-4], fg='bright_green')
+                    else:
+                        continue
+                # Add spacing
                 else:
-                    continue
-            # Add spacing
+                    click.echo("")
             else:
-                click.echo("")
-        else:
-            click.secho("  none\n", fg='red')
+                click.secho("  none\n", fg='red')
+    except FileNotFoundError:
+        click.secho("  File doesn't exist\n", fg='red')
 
 
 if __name__ == '__main__':
