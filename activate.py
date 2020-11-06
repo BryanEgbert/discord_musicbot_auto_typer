@@ -109,9 +109,14 @@ def main(prefix, vc, chat, server, playlist):
                             continue
                     # If the loop has completed
                     else:
-                        # Write loop queue command
-                        pyautogui.write(
-                            f"{prefix}loop queue", interval=0.03)
+                        if (prefix == "-")
+                            # Write loop queue command
+                            pyautogui.write(
+                                f"{prefix}loop queue", interval=0.03)
+                        else:
+                            pyautogui.write(
+                                f"{prefix}loopqueue", interval=0.03)
+                                
                         pyautogui.press('enter')
                         click.secho('done!', fg='green')
                         sys.exit()
