@@ -80,7 +80,7 @@ def main(prefix, vc, chat, server, playlist):
 
             # Locate chat channel and click it
             chat_channel_location = pyautogui.locateCenterOnScreen(
-                f"{chat_image_dir}\\{chat_img[chat-1]}", confidence=0.7)
+                f"{chat_image_dir}\\{chat_img[chat-1]}")
             pyautogui.click(chat_channel_location)
 
             # Locate the chatbox and click it
@@ -110,6 +110,7 @@ def main(prefix, vc, chat, server, playlist):
                             continue
                     # If the loop has completed
                     else:
+                        time.sleep(1)
                         if prefix == "-":
                             # Write loop queue command
                             pyautogui.write(
