@@ -9,9 +9,10 @@ import re
 import os
 
 # Image directory
-vc_image_dir = ".\\images\\voice_channel"
-server_image_dir = ".\\images\\server_img"
-chat_image_dir = ".\\images\\chat_channel"
+current_working_dir = os.getcwd()
+vc_image_dir = f"{current_working_dir}\\images\\voice_channel"
+server_image_dir = f"{current_working_dir}\\images\\server_img"
+chat_image_dir = f"{current_working_dir}\\images\\chat_channel"
 
 # File inside the image directory
 server_img = os.listdir(server_image_dir)
@@ -272,7 +273,6 @@ def view():
                 click.secho("  none\n", fg='red')
     except FileNotFoundError:
         click.secho("  File doesn't exist\n", fg='red')
-
 
 if __name__ == '__main__':
     cli()
