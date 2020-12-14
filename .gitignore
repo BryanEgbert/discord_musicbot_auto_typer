@@ -133,3 +133,4 @@ dmypy.json
 .pyre/
 # Text File
 *list.txt
+images/

@@ -19,6 +19,7 @@ server_img = os.listdir(server_image_dir)
 vc_img = os.listdir(vc_image_dir)
 chat_img = os.listdir(chat_image_dir)
 
+pyautogui.PAUSE = 2
 
 @click.group()
 def cli():
@@ -70,18 +71,39 @@ def main(prefix, vc, chat, server, playlist):
             logo_location = pyautogui.locateCenterOnScreen(
                 f"{server_image_dir}\\{server_img[server-1]}", confidence=0.6)
             pyautogui.click(logo_location)
-            time.sleep(1)
 
             # Locate voice channel and click it
             voice_channel_location = pyautogui.locateCenterOnScreen(
                 f"{vc_image_dir}\\{vc_img[vc-1]}", confidence=0.8)
-            pyautogui.click(voice_channel_location)
+            if(voice_channel_location == None):
+                # dc_channel = pyautogui.locateCenterOnScreen(
+                #     ".\\images\\dc_channel.png", confidence=0.4)
+                pyautogui.moveRel(100,100)
+                print(voice_channel_location)
+
+                while (voice_channel_location == None):
+                    pyautogui.PAUSE=0.2
+                    pyautogui.scroll(-120)
+                    voice_channel_location = pyautogui.locateCenterOnScreen(
+                        f"{vc_image_dir}\\{vc_img[vc-1]}", confidence=0.8)
+                else:
+                    pyautogui.click(voice_channel_location)
+            else:
+                pyautogui.click(voice_channel_location)
+                pyautogui.PAUSE = 2
             time.sleep(1)
 
             # Locate chat channel and click it
             chat_channel_location = pyautogui.locateCenterOnScreen(
-                f"{chat_image_dir}\\{chat_img[chat-1]}")
-            pyautogui.click(chat_channel_location)
+                f"{chat_image_dir}\\{chat_img[chat-1]}", confidence=0.7)
+            while chat_channel_location == None:
+                print(chat_channel_location)
+                pyautogui.moveRel(0,-300)
+                pyautogui.scroll(-50)
+                chat_channel_location = pyautogui.locateCenterOnScreen(
+                    f"{chat_image_dir}\\{chat_img[chat-1]}", confidence=0.7)
+            else:
+                pyautogui.click(chat_channel_location)
 
             # Locate the chatbox and click it
             chatbox_location = pyautogui.locateCenterOnScreen(
@@ -91,7 +113,8 @@ def main(prefix, vc, chat, server, playlist):
             # Open playlist.txt in read mode
             with open('playlist.txt', 'r') as file:
                 file_content = file.read()
-                playlists = file_content.split('\n')
+                stripped_content = file_content.strip(" ")
+                playlists = stripped_content.split('\n')
                 # Open the textfile path stored inside playlist.txt
                 with open(playlists[playlist-1], 'r', encoding="cp437", errors="ignore") as songs:
                     # Read and split the content into list based on line break
@@ -104,7 +127,7 @@ def main(prefix, vc, chat, server, playlist):
                         if i != '':
                             pyautogui.write(f"{prefix}play {i}", interval=0.03)
                             pyautogui.press('enter')
-                            time.sleep(0.02)
+            
                         # If exist, skip it and continue the loop
                         else:
                             continue
@@ -191,19 +214,16 @@ def remove_image(file_index, dir):
 
 @cli.command()
 @click.option("-d", "--discord", type=click.Path(exists=True), help="Register discord path")
-@click.option("-p", "--playlist", required=True, type=click.Path(exists=True), help="Register songs in textfile")
+@click.option("-p", "--playlist", type=click.Path(exists=True), help="Register songs in textfile")
 def register(discord, playlist):
     """Initialize discord path and song_playlist.txt"""
     # File type and input validation
     try:
-        if (discord != None and discord.endswith(".exe") and playlist.endswith(".txt")):
+        if (discord.endswith(".exe")):
             with open("discord_path.txt", "w") as file:
                 file.write(discord)
 
-            with open("playlist.txt", "a") as file:
-                file.write(playlist + "\n")
-
-        elif (discord == None and playlist.endswith(".txt")):
+        elif (playlist.endswith(".txt")):
             with open("playlist.txt", "a") as file:
                 file.write(playlist + "\n")
         else:
