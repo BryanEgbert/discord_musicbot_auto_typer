@@ -219,11 +219,19 @@ def register(discord, playlist):
     """Initialize discord path and song_playlist.txt"""
     # File type and input validation
     try:
-        if (discord.endswith(".exe")):
+        if (playlist == None):
+            if (discord.endswith(".exe")):
+                with open("discord_path.txt", "w") as file:
+                    file.write(discord)
+
+        elif (discord == None):
+            if (playlist.endswith(".txt")):
+                with open("playlist.txt", "a") as file:
+                    file.write(playlist + "\n")
+
+        elif (discord.endswith(".exe") and playlist.endswith(".txt")):
             with open("discord_path.txt", "w") as file:
                 file.write(discord)
-
-        elif (playlist.endswith(".txt")):
             with open("playlist.txt", "a") as file:
                 file.write(playlist + "\n")
         else:
