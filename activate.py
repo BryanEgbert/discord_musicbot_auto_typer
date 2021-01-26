@@ -19,7 +19,7 @@ server_img = os.listdir(server_image_dir)
 vc_img = os.listdir(vc_image_dir)
 chat_img = os.listdir(chat_image_dir)
 
-pyautogui.PAUSE = 2
+pyautogui.PAUSE = 0.5
 
 @click.group()
 def cli():
