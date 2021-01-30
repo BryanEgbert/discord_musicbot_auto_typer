@@ -9,10 +9,10 @@ import re
 import os
 
 # Image directory
-current_working_dir = os.getcwd()
-vc_image_dir = f"{current_working_dir}\\images\\voice_channel"
-server_image_dir = f"{current_working_dir}\\images\\server_img"
-chat_image_dir = f"{current_working_dir}\\images\\chat_channel"
+current_working_dir = os.path.dirname(os.path.abspath(__file__))
+vc_image_dir = f"{current_working_dir}\\dmat\\images\\voice_channel"
+server_image_dir = f"{current_working_dir}\\dmat\\images\\server_img"
+chat_image_dir = f"{current_working_dir}\\dmat\\images\\chat_channel"
 
 # File inside the image directory
 server_img = os.listdir(server_image_dir)
