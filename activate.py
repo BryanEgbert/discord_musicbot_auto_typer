@@ -51,7 +51,7 @@ def main(prefix, vc, chat, server, playlist):
 
         # Checking the chatbox image
         os.path.isfile(
-            ".\\images\\chatbox.png")
+            ".\\dmat\\images\\chatbox.png")
 
     except FileNotFoundError:
         click.secho(
@@ -62,7 +62,7 @@ def main(prefix, vc, chat, server, playlist):
     else:
         try:
             # Open discord app
-            with open("discord_path.txt", "r") as file:
+            with open(".\\dmat\\discord_path.txt", "r") as file:
                 discord_path = file.read()
                 subprocess.Popen(discord_path)
             time.sleep(2.5)
@@ -107,11 +107,11 @@ def main(prefix, vc, chat, server, playlist):
 
             # Locate the chatbox and click it
             chatbox_location = pyautogui.locateCenterOnScreen(
-                ".\\images\\chatbox.png", confidence=0.4)
+                ".\\dmat\\images\\chatbox.png", confidence=0.4)
             pyautogui.click(chatbox_location)
 
             # Open playlist.txt in read mode
-            with open('playlist.txt', 'r') as file:
+            with open('.\\dmat\\playlist.txt', 'r') as file:
                 file_content = file.read()
                 stripped_content = file_content.strip(" ")
                 playlists = stripped_content.split('\n')
@@ -278,7 +278,7 @@ def view():
     # List the playlist inside playlist.txt
     click.secho("\nPlaylist", fg="cyan", bold=True, underline=True)
     try:
-        with open("playlist.txt", "r") as file:
+        with open(".\\dmat\\playlist.txt", "r") as file:
             file_content = file.read()
             splitted_content = file_content.split('\n')
 
